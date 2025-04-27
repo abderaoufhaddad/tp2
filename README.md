@@ -1,2 +1,1 @@
-# tp2
-projet pyforum
+# PyForum - Travail pratique 2
