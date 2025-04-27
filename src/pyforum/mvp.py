@@ -29,39 +29,80 @@ def main():
             # Créer un utilisateur
             print("\nCréation d'un utilisateur...")
 
-            # Voici un exemple trivial de création d'un utilisateur. Vous devez le bonifier,
-            # car il ne prend en compte que le nom d'utilisateur.
+            # informations nécessaires pour créer un utilisateur
             username = input("Entrez le nom d'utilisateur: ")
-            utilisateur = {'username': username}
-            # TODO: Ajouter ici la logique pour demander des informations à l'utilisateur
+            email = input("Entrez l'adresse courriel: ")
+            password = input("Entrez le mot de passe: ")
 
-            # Le **utilisateur est une syntaxe Python pour déballer un dictionnaire.
-            # C'est à dire que les clés du dictionnaire deviennent des arguments nommés.
-            db.creer_utilisateur(**utilisateur)
+            # Créer l'utilisateur 
+            utilisateur = db.creer_utilisateur(username, email, password)
+            print(f"Utilisateur {username} créé avec succès!")
 
         elif choix == '2':
             # Créer un forum
             print("\nCréation d'un forum...")
-            # TODO: Ajouter ici la logique pour demander des informations à l'utilisateur
-            # TODO: Ajouter l'appel à la base de donnée pour créer le forum
+
+            # créer un forum
+            nom_forum = input("Entrez le nom du forum: ")
+            description_forum = input("Entrez la description du forum : ")
+            if not description_forum:
+                description_forum = None 
+
+            # Appeler la méthode  
+            forum = db.creer_forum(nom_forum, description_forum)
+
+            # Message de confirmation
+            print(f"Forum '{nom_forum}' créé avec succès!")
 
         elif choix == '3':
             # Créer une publication
             print("\nCréation d'une publication...")
-            # TODO: Ajouter ici la logique pour demander des informations à l'utilisateur
-            # TODO: Ajouter l'appel à la base de donnée pour créer la publication
+
+            #informations nécessaires pour créer une publication
+            titre_publication = input("Entrez le titre de la publication: ")
+            contenu_publication = input("Entrez le contenu de la publication: ")
+
+            # Demander l'identifiant de l'auteur et du forum
+            auteur_id = input("Entrez l'identifiant de l'auteur (utilisateur): ")
+            forum_id = input("Entrez l'identifiant du forum auquel la publication appartient: ")
+
+            # Appeler la méthode pour créer la publication 
+            publication = db.creer_publication(titre_publication, contenu_publication, auteur_id, forum_id)
+            print(f"Publication '{titre_publication}' créée avec succès!")
 
         elif choix == '4':
             # Ajouter un commentaire
             print("\nAjouter un commentaire...")
-            # TODO: Ajouter ici la logique pour demander des informations à l'utilisateur
-            # TODO: Ajouter l'appel à la base de donnée pour créer le commentaire
+
+            # Demander le contenu 
+            contenu_commentaire = input("Entrez le contenu du commentaire: ")
+
+            # Demander l'identifiant de l'auteur et de la publication
+            auteur_id = input("Entrez l'identifiant de l'auteur (utilisateur): ")
+            publication_id = input("Entrez l'identifiant de la publication à commenter: ")
+
+            # Appeler la méthode pour créer le commentaire 
+            commentaire = db.creer_commentaire(contenu_commentaire, auteur_id, publication_id)
+            print(f"Commentaire ajouté avec succès à la publication {publication_id}!")
 
         elif choix == '5':
             # Joindre un forum
             print("\nJoindre un forum...")
-            # TODO: Ajouter ici la logique pour demander des informations à l'utilisateur
-            # TODO: Ajouter les appels à la base de donnée pour ajouter l'utilisateur au forum
+
+            # Demander l'identifiant de l'utilisateur et du forum
+            utilisateur_id = input("Entrez l'identifiant de l'utilisateur: ")
+            forum_id = input("Entrez l'identifiant du forum à rejoindre: ")
+
+            # Vérifier si l'utilisateur et le forum existent 
+            utilisateur = db.obtenir_utilisateur_par_id(utilisateur_id)  # Récupérer l'utilisateur par ID
+            forum = db.obtenir_forum_par_id(forum_id)  # Récupérer le forum par ID
+
+            if utilisateur and forum:
+                # Appeler la méthode
+                db.ajouter_utilisateur_au_forum(utilisateur_id, forum_id)
+                print(f"L'utilisateur {utilisateur.username} a rejoint le forum {forum_id}.")
+            else:
+                print("L'utilisateur ou le forum n'existe pas.")
 
         elif choix == '6':
             # Quitter le programme
